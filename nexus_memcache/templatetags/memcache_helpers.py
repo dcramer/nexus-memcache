@@ -28,3 +28,5 @@ def duration(value):
     value = datetime.datetime.now() - datetime.timedelta(seconds=int(value))
     return timesince(value)
 register.filter(duration)
+
+register.filter('int', lambda x: int(x))
