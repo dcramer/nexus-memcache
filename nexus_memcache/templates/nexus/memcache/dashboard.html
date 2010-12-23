@@ -1,4 +1,8 @@
 {% load memcache_helpers %}
+<div class="capacity-graph">
+    <div style="width: {% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}%"></div>
+    <strong>{% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}% load</strong>
+</div>
 <table>
     <colgroup>
         <col width="30%"/>

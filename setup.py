@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Credit to bartTC and https://github.com/bartTC/django-memcache-status for ideas
+
 try:
     from setuptools import setup, find_packages
     from setuptools.command.test import test
