@@ -1,0 +1,34 @@
+{% load memcache_helpers %}
+<table>
+    <colgroup>
+        <col width="30%"/>
+    </colgroup>
+    <tbody>
+        <tr>
+            <th>Status:</th>
+            <td>{% widthratio global_stats.accepting_conns global_stats.total 100 %}% online ({{ global_stats.accepting_conns }} / {{ global_stats.total }})</td>
+        </tr>
+        <tr>
+            <th>Memory:</th>
+            <td>{{ global_stats.bytes|humanize_bytes }} / {{ global_stats.limit_maxbytes|humanize_bytes }}</td>
+        </tr>
+        <tr>
+            <th>Connections:</th>
+            <td>{{ global_stats.curr_connections|intcomma }}</td>
+        </tr>
+        <tr>
+            <th>Items:</th>
+            <td>{{ global_stats.curr_items|intcomma }}</td>
+        </tr>
+        <tr>
+            <th>Hit Ratio:</th>
+            <td>
+                {% if global_stats.cmd_get %}
+                    {% widthratio global_stats.get_hits global_stats.cmd_get 100 %}%
+                {% else %}
+                    <em>n/a</em>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
