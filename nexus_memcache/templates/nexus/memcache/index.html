@@ -3,48 +3,59 @@
 {% block head %}
     {{ block.super }}
     <link rel="stylesheet" href="{{ nexus_media_prefix }}/memcache/css/memcache.css">
+    <script src="{{ nexus_media_prefix }}/memcache/js/memcache.js"></script>
 {% endblock %}
 
 {% load memcache_helpers %}
 
 {% block content %}
     <p>Displaying statistics for {{ cache_stats|length }} memcached server{{ cache_stats|length|pluralize }}</p>
-    {% for server, stats in cache_stats %}
-        <div class="server">
-            <h2>{{ server }}</h2>
-            <table>
-                <colgroup>
-                    <col width="30%"/>
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>Status:</th>
-                        <td>{% if stats.accepting_conns %}online{% else %}offline{% endif %}</td>
-                    </tr>
-                    <tr>
-                        <th>Memory:</th>
-                        <td>{{ stats.bytes|humanize_bytes }} / {{ stats.limit_maxbytes|humanize_bytes }}</td>
-                    </tr>
-                    <tr>
-                        <th>Connections:</th>
-                        <td>{{ stats.curr_connections|intcomma }}</td>
-                    </tr>
-                    <tr>
-                        <th>Items:</th>
-                        <td>{{ stats.curr_items|intcomma }}</td>
-                    </tr>
-                    <tr>
-                        <th>Hit Ratio:</th>
-                        <td>
-                            {% if stats.cmd_get %}
-                                {% widthratio stats.get_hits stats.cmd_get 100 %}%
-                            {% else %}
-                                <em>n/a</em>
-                            {% endif %}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    {% endfor %}
+    <ul class="server-list">
+        {% for server, stats in cache_stats %}
+            <li class="server server-{% if stats.accepting_conns %}online{% else %}offline{% endif %}" id="{{ forloop.index }}">
+                <h2>{{ server }}</h2>
+                <table>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col/>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>Uptime:</th>
+                            <td>{{ stats.uptime|duration }}</td>
+                        </tr>
+                        <tr>
+                            <th>Usage:</th>
+                            <td>{{ stats.bytes|humanize_bytes }} / {{ stats.limit_maxbytes|humanize_bytes }} ({{ stats.rusage_system|humanize_bytes }} system)</td>
+                        </tr>
+                        <tr>
+                            <th>Hit Ratio:</th>
+                            <td>
+                                {% if stats.cmd_get != '0' %}
+                                    {% widthratio stats.get_hits stats.cmd_get 100 %}%
+                                {% else %}
+                                    <em>n/a</em>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="more" style="display:none">
+                    <table>
+                        <colgroup>
+                            <col width="30%"/>
+                            <col/>
+                        </colgroup>
+                        {% for k, v in stats.iteritems %}
+                            <tr>
+                                <th>{{ k|title }}</th>
+                                <td>{{ v|intcomma }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <button class="button full small toggle">Expand</button>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

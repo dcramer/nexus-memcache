@@ -35,10 +35,11 @@ class MemcacheModule(nexus.NexusModule):
             'cmd_get': 0,
             'get_hits': 0,
             'get_misses': 0,
+            'rusage_system': 0,
         }
         for host, stats in cache_stats:
             for k in global_stats.iterkeys():
-                global_stats[k] += int(stats[k])
+                global_stats[k] += float(stats[k])
         global_stats['total'] = len(cache_stats)
 
         return self.render_to_string('nexus/memcache/dashboard.html', {
@@ -51,25 +52,7 @@ class MemcacheModule(nexus.NexusModule):
         except AttributeError:
             cache_stats = []
         
-        global_stats = {
-            'accepting_conns': 0,
-            'bytes': 0,
-            'limit_maxbytes': 0,
-            'curr_items': 0,
-            'curr_connections': 0,
-            'total_connections': 0,
-            'total_items': 0,
-            'cmd_get': 0,
-            'get_hits': 0,
-            'get_misses': 0,
-        }
-        for host, stats in cache_stats:
-            for k in global_stats.iterkeys():
-                global_stats[k] += int(stats[k])
-        global_stats['total'] = len(cache_stats)
-        
         return self.render_to_response("nexus/memcache/index.html", {
             'cache_stats': cache_stats,
-            'global_stats': global_stats,
         }, request)
 nexus.site.register(MemcacheModule, 'memcache')

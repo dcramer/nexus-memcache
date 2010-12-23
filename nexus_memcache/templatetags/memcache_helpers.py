@@ -1,6 +1,8 @@
 from django import template
 from django.contrib.humanize.templatetags.humanize import intcomma
 
+import datetime
+
 register = template.Library()
 
 def humanize_bytes(bytes):
@@ -17,6 +19,12 @@ def humanize_bytes(bytes):
     else:
         size = '%.2fB' % bytes
     return size
-humanize_bytes = register.filter(humanize_bytes)
+register.filter(humanize_bytes)
 
-intcomma = register.filter(intcomma)
+register.filter(intcomma)
+
+def duration(value):
+    from django.template.defaultfilters import timesince
+    value = datetime.datetime.now() - datetime.timedelta(seconds=int(value))
+    return timesince(value)
+register.filter(duration)

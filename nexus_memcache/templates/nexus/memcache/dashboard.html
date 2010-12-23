@@ -9,12 +9,12 @@
             <td>{% widthratio global_stats.accepting_conns global_stats.total 100 %}% online ({{ global_stats.accepting_conns }} / {{ global_stats.total }})</td>
         </tr>
         <tr>
-            <th>Memory:</th>
-            <td>{{ global_stats.bytes|humanize_bytes }} / {{ global_stats.limit_maxbytes|humanize_bytes }}</td>
-        </tr>
-        <tr>
             <th>Connections:</th>
             <td>{{ global_stats.curr_connections|intcomma }}</td>
+        </tr>
+        <tr>
+            <th>Usage:</th>
+            <td>{{ global_stats.bytes|humanize_bytes }} / {{ global_stats.limit_maxbytes|humanize_bytes }} ({{ global_stats.rusage_system|humanize_bytes }} system)</td>
         </tr>
         <tr>
             <th>Items:</th>
