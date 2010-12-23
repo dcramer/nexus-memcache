@@ -55,4 +55,4 @@ class MemcacheModule(nexus.NexusModule):
         return self.render_to_response("nexus/memcache/index.html", {
             'cache_stats': cache_stats,
         }, request)
-nexus.site.register(MemcacheModule, 'memcache')
+nexus.site.register(MemcacheModule, 'memcache', category='cache')
