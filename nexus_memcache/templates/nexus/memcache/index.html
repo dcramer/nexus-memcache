@@ -1,0 +1,50 @@
+{% extends "nexus/module.html" %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{{ nexus_media_prefix }}/memcache/css/memcache.css">
+{% endblock %}
+
+{% load memcache_helpers %}
+
+{% block content %}
+    <p>Displaying statistics for {{ cache_stats|length }} memcached server{{ cache_stats|length|pluralize }}</p>
+    {% for server, stats in cache_stats %}
+        <div class="server">
+            <h2>{{ server }}</h2>
+            <table>
+                <colgroup>
+                    <col width="30%"/>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>Status:</th>
+                        <td>{% if stats.accepting_conns %}online{% else %}offline{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th>Memory:</th>
+                        <td>{{ stats.bytes|humanize_bytes }} / {{ stats.limit_maxbytes|humanize_bytes }}</td>
+                    </tr>
+                    <tr>
+                        <th>Connections:</th>
+                        <td>{{ stats.curr_connections|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <th>Items:</th>
+                        <td>{{ stats.curr_items|intcomma }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hit Ratio:</th>
+                        <td>
+                            {% if stats.cmd_get %}
+                                {% widthratio stats.get_hits stats.cmd_get 100 %}%
+                            {% else %}
+                                <em>n/a</em>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}
