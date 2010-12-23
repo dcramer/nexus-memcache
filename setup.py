@@ -25,9 +25,9 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        'django-celery',
+        'nexus>=0.1.1',
     ],
-    test_suite = 'nexus_celery.tests',
+    test_suite = 'nexus_memcache.tests',
     include_package_data=True,
     cmdclass={"test": mytest},
     classifiers=[
