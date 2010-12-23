@@ -1,4 +1,4 @@
-nexus-celery
-------------
+nexus-memcache
+--------------
 
-TODO
+Provides a memcache statistics module in `Nexus <https://github.com/dcramer/nexus>`_.
