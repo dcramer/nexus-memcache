@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.utils.datastructures import SortedDict
 
 import nexus
 
@@ -48,7 +49,7 @@ class MemcacheModule(nexus.NexusModule):
     
     def index(self, request):
         try:
-            cache_stats = cache._cache.get_stats()
+            cache_stats = ((k, SortedDict(sorted(v.iteritems(), key=lambda x: x[0]))) for k, v in cache._cache.get_stats())
         except AttributeError:
             cache_stats = []
         

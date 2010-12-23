@@ -48,7 +48,7 @@
                         </colgroup>
                         {% for k, v in stats.iteritems %}
                             <tr>
-                                <th>{{ k|title }}</th>
+                                <th>{{ k|titlize }}</th>
                                 <td>{{ v|intcomma }}</td>
                             </tr>
                         {% endfor %}
