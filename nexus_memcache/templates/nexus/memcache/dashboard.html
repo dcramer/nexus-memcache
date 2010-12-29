@@ -10,7 +10,7 @@
     <tbody>
         <tr>
             <th>Status:</th>
-            <td>{% widthratio global_stats.accepting_conns global_stats.total 100 %}% online ({{ global_stats.accepting_conns|int }} / {{ global_stats.total }})</td>
+            <td>{% widthratio global_stats.online global_stats.total 100 %}% online ({{ global_stats.online|int }} / {{ global_stats.total }})</td>
         </tr>
         <tr>
             <th>Connections:</th>

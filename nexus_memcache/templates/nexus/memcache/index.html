@@ -12,7 +12,7 @@
     <p>Displaying statistics for {{ cache_stats|length }} memcached server{{ cache_stats|length|pluralize }}</p>
     <ul class="server-list">
         {% for server, stats in cache_stats %}
-            <li class="server server-{% if stats.accepting_conns %}online{% else %}offline{% endif %}" id="{{ forloop.index }}">
+            <li class="server server-{% if stats.online %}online{% else %}offline{% endif %}" id="{{ forloop.index }}">
                 <h2>{{ server }}</h2>
                 <button class="button small toggle">Expand</button>
                 <div class="capacity-graph">
