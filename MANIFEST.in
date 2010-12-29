@@ -1,4 +1,4 @@
 include setup.py README MANIFEST.in LICENSE
-recursive-include nexus_celery/templates *
-recursive-include nexus_celery/media *
+recursive-include nexus_memcache/templates *
+recursive-include nexus_memcache/media *
 global-exclude *~
