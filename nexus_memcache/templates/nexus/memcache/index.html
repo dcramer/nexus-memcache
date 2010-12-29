@@ -14,10 +14,17 @@
         {% for server, stats in cache_stats %}
             <li class="server server-{% if stats.online %}online{% else %}offline{% endif %}" id="{{ forloop.index }}">
                 <h2>{{ server }}</h2>
-                <button class="button small toggle">Expand</button>
+                {% if stats.online %}
+                    <button class="button small toggle">Expand</button>
+                {% endif %}
                 <div class="capacity-graph">
-                    <div style="width: {% widthratio stats.bytes stats.limit_maxbytes 100 %}%"></div>
-                    <strong>{% widthratio stats.bytes stats.limit_maxbytes 100 %}% load</strong>
+                    {% if stats.online %}
+                        <div style="width: {% widthratio stats.bytes stats.limit_maxbytes 100 %}%"></div>
+                        <strong>{% widthratio stats.bytes stats.limit_maxbytes 100 %}% load</strong>
+                    {% else %}
+                        <div></div>
+                        <strong>Offline</strong>
+                    {% endif %}
                 </div>
                 <table>
                     <colgroup>
@@ -27,17 +34,33 @@
                     <tbody>
                         <tr>
                             <th>Uptime:</th>
-                            <td>{{ stats.uptime|duration }}</td>
+                            <td>
+                                {% if stats.online %}
+                                    {{ stats.uptime|duration }}
+                                {% else %}
+                                    Offline
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <th>Usage:</th>
-                            <td>{{ stats.bytes|humanize_bytes }} / {{ stats.limit_maxbytes|humanize_bytes }} ({{ stats.rusage_system|humanize_bytes }} system)</td>
+                            <td>
+                                {% if stats.online %}
+                                    {{ stats.bytes|humanize_bytes }} / {{ stats.limit_maxbytes|humanize_bytes }} ({{ stats.rusage_system|humanize_bytes }} system)
+                                {% else %}
+                                    <em>n/a</em>
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <th>Hit Ratio:</th>
                             <td>
-                                {% if stats.cmd_get != '0' %}
-                                    {% widthratio stats.get_hits stats.cmd_get 100 %}%
+                                {% if stats.online %}
+                                    {% if stats.cmd_get != '0' %}
+                                        {% widthratio stats.get_hits stats.cmd_get 100 %}%
+                                    {% else %}
+                                        <em>n/a</em>
+                                    {% endif %}
                                 {% else %}
                                     <em>n/a</em>
                                 {% endif %}
@@ -45,21 +68,23 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="more">
-                    <table>
-                        <caption>Detailed Statistics</caption>
-                        <colgroup>
-                            <col width="35%"/>
-                            <col/>
-                        </colgroup>
-                        {% for k, v in stats.iteritems %}
-                            <tr>
-                                <th>{{ k|titlize }}</th>
-                                <td>{{ v|intcomma }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+                {% if stats.online %}
+                    <div class="more">
+                        <table>
+                            <caption>Detailed Statistics</caption>
+                            <colgroup>
+                                <col width="35%"/>
+                                <col/>
+                            </colgroup>
+                            {% for k, v in stats.iteritems %}
+                                <tr>
+                                    <th>{{ k|titlize }}</th>
+                                    <td>{{ v|intcomma }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
