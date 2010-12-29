@@ -19,7 +19,7 @@ class mytest(test):
 
 setup(
     name='nexus-memcache',
-    version='0.2.0',
+    version='0.3.0',
     author='David Cramer',
     author_email='dcramer@gmail.com',
     url='http://github.com/dcramer/nexus-memcache',
