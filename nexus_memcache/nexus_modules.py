@@ -8,19 +8,22 @@ import nexus
 
 from nexus_memcache import conf
 
-def get_caches():
-    caches = []
-    schema, hosts, params = parse_backend_uri(conf.BACKEND)
-    for host in hosts.split(';'):
-        caches.append((host, get_cache('%s://%s?%s' % (schema, host, params))._cache))
-    return caches
-
 class MemcacheModule(nexus.NexusModule):
     home_url = 'index'
     name = 'memcache'
     
+    def get_caches(self):
+        caches = []
+        schema, hosts, params = parse_backend_uri(conf.BACKEND)
+        for host in hosts.split(';'):
+            try:
+                caches.append((host, get_cache('%s://%s?%s' % (schema, host, params))._cache))
+            except Exception, e:
+                self.logger.exception(e)
+        return caches
+    
     def get_stats(self, timeout=5):
-        for host, cache in get_caches():
+        for host, cache in self.get_caches():
             default_timeout = socket.getdefaulttimeout()
             socket.setdefaulttimeout(timeout)
             try:

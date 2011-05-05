@@ -19,7 +19,7 @@ class mytest(test):
 
 setup(
     name='nexus-memcache',
-    version='0.3.3',
+    version='0.3.4',
     author='David Cramer',
     author_email='dcramer@gmail.com',
     url='http://github.com/dcramer/nexus-memcache',
@@ -27,7 +27,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        'nexus>=0.1.1',
+        'nexus>=0.1.3',
     ],
     test_suite = 'nexus_memcache.tests',
     include_package_data=True,
