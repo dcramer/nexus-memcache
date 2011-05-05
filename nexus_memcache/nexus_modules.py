@@ -14,14 +14,13 @@ def get_caches():
     for host in hosts.split(';'):
         caches.append((host, get_cache('%s://%s?%s' % (schema, host, params))._cache))
     return caches
-caches = get_caches()
 
 class MemcacheModule(nexus.NexusModule):
     home_url = 'index'
     name = 'memcache'
     
     def get_stats(self, timeout=5):
-        for host, cache in caches:
+        for host, cache in get_caches():
             default_timeout = socket.getdefaulttimeout()
             socket.setdefaulttimeout(timeout)
             try:
