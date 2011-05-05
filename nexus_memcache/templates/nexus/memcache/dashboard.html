@@ -1,38 +1,42 @@
 {% load memcache_helpers %}
-<div class="capacity-graph">
-    <div style="width: {% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}%"></div>
-    <strong>{% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}% load</strong>
-</div>
-<table>
-    <colgroup>
-        <col width="30%"/>
-    </colgroup>
-    <tbody>
-        <tr>
-            <th>Status:</th>
-            <td>{% widthratio global_stats.online global_stats.total 100 %}% online ({{ global_stats.online|int }} / {{ global_stats.total }})</td>
-        </tr>
-        <tr>
-            <th>Connections:</th>
-            <td>{{ global_stats.curr_connections|int|intcomma }}</td>
-        </tr>
-        <tr>
-            <th>Usage:</th>
-            <td>{{ global_stats.bytes|humanize_bytes }} / {{ global_stats.limit_maxbytes|humanize_bytes }} ({{ global_stats.rusage_system|humanize_bytes }} system)</td>
-        </tr>
-        <tr>
-            <th>Items:</th>
-            <td>{{ global_stats.curr_items|int|intcomma }}</td>
-        </tr>
-        <tr>
-            <th>Hit Ratio:</th>
-            <td>
-                {% if global_stats.cmd_get %}
-                    {% widthratio global_stats.get_hits global_stats.cmd_get 100 %}%
-                {% else %}
-                    <em>n/a</em>
-                {% endif %}
-            </td>
-        </tr>
-    </tbody>
-</table>
+{% if global_stats.total %}
+    <div class="capacity-graph">
+        <div style="width: {% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}%"></div>
+        <strong>{% widthratio global_stats.bytes global_stats.limit_maxbytes 100 %}% load</strong>
+    </div>
+    <table>
+        <colgroup>
+            <col width="30%"/>
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>Status:</th>
+                <td>{% widthratio global_stats.online global_stats.total 100 %}% online ({{ global_stats.online|int }} / {{ global_stats.total }})</td>
+            </tr>
+            <tr>
+                <th>Connections:</th>
+                <td>{{ global_stats.curr_connections|int|intcomma }}</td>
+            </tr>
+            <tr>
+                <th>Usage:</th>
+                <td>{{ global_stats.bytes|humanize_bytes }} / {{ global_stats.limit_maxbytes|humanize_bytes }} ({{ global_stats.rusage_system|humanize_bytes }} system)</td>
+            </tr>
+            <tr>
+                <th>Items:</th>
+                <td>{{ global_stats.curr_items|int|intcomma }}</td>
+            </tr>
+            <tr>
+                <th>Hit Ratio:</th>
+                <td>
+                    {% if global_stats.cmd_get %}
+                        {% widthratio global_stats.get_hits global_stats.cmd_get 100 %}%
+                    {% else %}
+                        <em>n/a</em>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+    <p>No memcache connections were found.</p>
+{% endif %}
