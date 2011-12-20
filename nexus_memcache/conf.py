@@ -1,3 +1,3 @@
 from django.conf import settings
 
-BACKEND = getattr(settings, 'NEXUS_MEMCACHE_BACKEND', settings.CACHE_BACKEND)
+BACKEND = getattr(settings, 'NEXUS_MEMCACHE_BACKEND', getattr(settings, 'CACHE_BACKEND', None))
